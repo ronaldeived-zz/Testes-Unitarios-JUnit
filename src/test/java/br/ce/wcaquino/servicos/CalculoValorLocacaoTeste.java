@@ -1,7 +1,9 @@
-package br.ce.wcaquino.servicos;
+ package br.ce.wcaquino.servicos;
 
+import static br.ce.wcaquino.builders.FilmeBuilder.umFilme;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,7 +15,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.Mockito;
 
+import br.ce.wcaquino.daos.LocacaoDAO;
+import br.ce.wcaquino.daos.LocacaoDAOFake;
 import br.ce.wcaquino.entidades.Filme;
 import br.ce.wcaquino.entidades.Locacao;
 import br.ce.wcaquino.entidades.Usuario;
@@ -37,14 +42,18 @@ public class CalculoValorLocacaoTeste {
 	@Before
 	public void before() {
 		service = new LocacaoService();
+		LocacaoDAO dao = mock(LocacaoDAO.class);
+		service.setLocacaoDAO(dao);
+		SPCService spc = mock(SPCService.class);
+		service.setSPCService(spc);
 	}
 	
-	private static Filme filme1 = new Filme("filme 1", 2, 4.0);
-	private static Filme filme2 = new Filme("filme 2", 2, 4.0);
-	private static Filme filme3 = new Filme("filme 3", 2, 4.0);
-	private static Filme filme4 = new Filme("filme 4", 2, 4.0);
-	private static Filme filme5 = new Filme("filme 5", 2, 4.0);
-	private static Filme filme6 = new Filme("filme 6", 2, 4.0);
+	private static Filme filme1 = umFilme().agora();
+	private static Filme filme2 = umFilme().agora();
+	private static Filme filme3 = umFilme().agora();
+	private static Filme filme4 = umFilme().agora();
+	private static Filme filme5 = umFilme().agora();
+	private static Filme filme6 = umFilme().agora();
 	
 	@Parameters(name = "{2}")
 	public static Collection<Object[]> getParametros(){
@@ -68,10 +77,5 @@ public class CalculoValorLocacaoTeste {
 		
 		//verificação
 		assertThat(resultado.getValor(), is(valorLocacao));
-	}
-	
-	@Test
-	public void teste() {
-		System.out.println(valorLocacao);
 	}
 }
